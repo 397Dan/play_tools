@@ -7,6 +7,9 @@ import os
 import datetime
 import time
 
+pyPath = os.path.dirname(os.path.realpath(__file__ ))
+wsPath = os.path.dirname(pyPath)
+
 header = {
 	'User-Agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:62.0) Gecko/20100101 Firefox/62.0',
 	# 'Accept':'*/*' ,
@@ -37,15 +40,23 @@ class XimaTools(object):
 		with open(filePath,'r') as f:
 			return f.read()
 
-	def writeFile(self,filePath,json):
-		print filePath
-		if os.path.exists(filePath):
+	def isExistsFile(self,fileName):
+		print fileName
+		if os.path.exists(fileName):
 			pass
 		else:
-			os.mknod(filePath)
+			os.mknod(fileName)
+
+	def writeFile(self,filePath,content):
+		self.isExistsFile(filePath)
 		with open(filePath,'w') as f:
-			f.write(json)
+			f.write(content)
 
 	def getTodayTimeStr(self):
 		return datetime.date.fromtimestamp(time.time()).strftime("%Y-%m-%d")
 
+	def getFileName(self,name,date='',suf='.json'):
+		if date == '':
+			date = self.getTodayTimeStr() # eg:2019-01-19
+		fileName = ''.join([wsPath,name,'_',date,suf])
+		return fileName
